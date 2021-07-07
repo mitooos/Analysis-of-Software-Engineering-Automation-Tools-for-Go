@@ -1,0 +1,2 @@
+safesql:
+	safesql -q .

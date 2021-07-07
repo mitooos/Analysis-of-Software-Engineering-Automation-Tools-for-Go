@@ -1,0 +1,23 @@
+{
+  "Name": "example",
+  "Module": "example",
+  "GoVersion": "1.16",
+  "Domains": [
+    {
+      "Name": "users",
+      "Ports":[
+        {
+          "Type": "api",
+          "ParentName": "users"
+        }
+      ],
+      "Adapters":[
+        {
+          "Type": "sql",
+          "ParentName": "users"
+        }
+      ]
+    }  
+  ],
+  "Port": "8080"
+}

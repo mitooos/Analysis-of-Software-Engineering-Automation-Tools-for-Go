@@ -1,0 +1,2 @@
+prealloc:
+	prealloc .

@@ -1,0 +1,16 @@
+syntax = "proto3";
+option go_package = "/grpc-generated;grpc_generated";
+
+package timezone;
+
+service TimeZone {
+  rpc WhatTimeIsIt (TimeRequest) returns (TimeReply) {}
+}
+
+message TimeRequest {
+  string timeZone = 1;
+}
+
+message TimeReply {
+  string time = 1;
+}

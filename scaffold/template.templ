@@ -1,0 +1,217 @@
+{
+  "Name": "",
+  "Module": "",
+  "GoVersion": "",
+  "Domains": [
+    {
+      "Name": "",
+      "Ports":[
+        {
+          "Type": "",
+          "ParentName": ""
+        }
+      ],
+      "Adapters":[
+        {
+          "Type": "",
+          "ParentName": ""
+        }
+      ]
+    }  
+  ],
+  "Port": "",
+}
+
+>>>{{ .Name }}/
+>>>.env
+
+<<<.env
+
+>>>.env.example
+
+<<<.env.example
+
+>>>.gitignore
+.env
+*.swp
+.DS_Store
+
+
+<<<.gitignore
+
+
+>>>Makefile
+# run the project
+run:
+	go run src/main.go
+
+# build the project
+build:
+	go build src/main.go
+
+# tidies dependencies
+tidy-deps:
+	go mod tidy
+
+# vendors dependencies
+deps:
+	go mod tidy
+	go mod vendor
+
+# run all tests with coverage
+test-cover:
+	go test ./... -cover -coverprofile=coverage.out -race
+
+# launches browser with coverage report from last test run
+watch-coverage:
+	go tool cover -html=coverage.out
+
+# serves project's documentation on port 6060
+docs:
+	godoc -http=:6060
+
+# formats project with go's style guidelines
+fmt:
+	gofmt -w -s ./src
+
+# checks the project for possible errors
+check:
+	staticcheck ./...
+
+# generates mocks for interfaces defined in the project
+gen-mocks:
+	mockery -r --srcpkg=./src/ --all
+
+<<<Makefile
+
+>>>README.md
+
+<<<README.md
+
+>>>go.mod
+module {{ .Module }} 
+
+go {{ .GoVersion }}
+
+
+<<<go.mod
+
+>>>go.sum
+
+<<<go.sum
+
+>>>src/
+
+>>>main.go
+package main
+
+import (
+	"log"
+
+	"github.com/joho/godotenv"
+)
+
+func init() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Printf("error loading .env, %v", err)
+	}
+}
+
+func main() {
+  log.Println("Ehlo World")
+}
+
+<<<main.go
+{{ range .Domains }}
+>>>{{ .Name }}/
+
+>>>ports/
+{{ range .Ports }}
+
+>>>{{ .Type }}.go
+package {{ replace .ParentName "_" "." }}ports
+<<<{{ .Type }}.go
+
+>>>{{ .Type }}_test.go
+package {{ replace .ParentName "_" "." }}ports
+<<<{{ .Type }}_test.go
+
+{{ end }}
+<<<ports/
+
+>>>adapters/
+{{ range .Adapters}}
+
+>>>{{ .Type }}.go
+package {{ replace .ParentName "_" "." }}adapters
+<<<{{ .Type }}.go
+
+>>>{{ .Type }}_test.go
+package {{ replace .ParentName "_" "." }}adapters
+<<<{{ .Type }}_test.go
+
+{{ end }}
+<<<adapters/
+
+>>>domain/
+>>>{{ .Name }}.go
+package {{ replace .Name "_" "." }}
+<<<{{ .Name }}.go
+
+>>>{{ .Name }}_test.go
+package {{ replace .Name "_" "." }}
+<<<{{ .Name }}_test.go
+<<<domain/
+
+>>>app/
+>>>{{ .Name }}_service.go
+package {{ replace .Name "_" "." }}service
+<<<{{ .Name }}_service.go
+
+>>>{{ .Name }}_service_test.go
+package {{ replace .Name "_" "." }}service
+<<<{{ .Name }}_service_test.go
+<<<app/
+
+<<<{{ .Name }}/
+{{ end }}
+
+<<<src/
+
+>>>test/
+>>>test_e2e_test.go
+package e2e_test
+<<<test_e2e_test.go
+<<<test/
+
+
+>>>zarf/
+
+>>>docker/
+
+>>>Dockerfile
+FROM golang:1.15.8-alpine3.13
+
+WORKDIR /app
+
+ENV GO111MODULE=on 
+
+COPY . .
+
+RUN go build src/main.go
+
+EXPOSE [{{ .Port }}]
+
+CMD ["./main"]
+
+<<<Dockerfile
+
+<<< docker/
+
+
+<<<zarf/
+
+<<<{{ .Name }}/
